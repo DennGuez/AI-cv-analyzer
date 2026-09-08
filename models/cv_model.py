@@ -9,4 +9,4 @@ class AnalysisCV(BaseModel):
     relevant_experience: str = Field(description="Resume of the more relevant experience")
     streghts: list[str] = Field(description="3-5 core strengths derived from the candidate’s profile")
     evelopment_areas: list[str] = Field(description="2-4 areas where the candidate could develop or improve")
-    fit_score: int = Field(description="Fit score from 0-100 based on experience, skills, and education", ge=0, le=100)
+    fit_score: int = Field(description="Fit score from 0-100 based on experience, skills, and education", ge=0, le=100) 
