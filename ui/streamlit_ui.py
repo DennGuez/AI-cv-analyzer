@@ -168,15 +168,15 @@ def mostrar_resultados(resultado: AnalysisCV):
     
     st.subheader("🎯 Evaluación Principal")
     
-    if resultado.porcentaje_ajuste >= 80:
+    if resultado.fit_score >= 80:
         color = "🟢"
         nivel = "EXCELENTE"
         mensaje = "Candidato altamente recomendado"
-    elif resultado.porcentaje_ajuste >= 60:
+    elif resultado.fit_score >= 60:
         color = "🟡"
         nivel = "BUENO"
         mensaje = "Candidato recomendado con reservas"
-    elif resultado.porcentaje_ajuste >= 40:
+    elif resultado.fit_score >= 40:
         color = "🟠"
         nivel = "REGULAR"
         mensaje = "Candidato requiere evaluación adicional"
@@ -189,7 +189,7 @@ def mostrar_resultados(resultado: AnalysisCV):
     with col2:
         st.metric(
             label="Porcentaje de Ajuste al Puesto",
-            value=f"{resultado.porcentaje_ajuste}%",
+            value=f"{resultado.fit_score}%",
             delta=f"{color} {nivel}"
         )
         st.markdown(f"**{mensaje}**")
@@ -200,21 +200,21 @@ def mostrar_resultados(resultado: AnalysisCV):
     
     col1, col2 = st.columns(2)
     with col1:
-        st.info(f"**👨‍💼 Nombre:** {resultado.nombre_candidato}")
-        st.info(f"**⏱️ Experiencia:** {resultado.experiencia_años} años")
+        st.info(f"**👨‍💼 Nombre:** {resultado.candidate_name}")
+        st.info(f"**⏱️ Experiencia:** {resultado.years_of_experience} años")
     
     with col2:
         st.info(f"**🎓 Educación:** {resultado.education}")
     
     st.subheader("💼 Experiencia Relevante")
-    st.info(f"📋 **Resumen de experiencia:**\n\n{resultado.experiencia_relevante}")
+    st.info(f"📋 **Resumen de experiencia:**\n\n{resultado.relevant_experience}")
     
     st.divider()
     
     st.subheader("🛠️ Habilidades Técnicas Clave")
-    if resultado.habilidades_clave:
-        cols = st.columns(min(len(resultado.habilidades_clave), 4))
-        for i, habilidad in enumerate(resultado.habilidades_clave):
+    if resultado.key_skills:
+        cols = st.columns(min(len(resultado.key_skills), 4))
+        for i, habilidad in enumerate(resultado.key_skills):
             with cols[i % 4]:
                 st.success(f"✅ {habilidad}")
     else:
@@ -226,16 +226,16 @@ def mostrar_resultados(resultado: AnalysisCV):
     
     with col_fortalezas:
         st.subheader("💪 Fortalezas Principales")
-        if resultado.fortalezas:
-            for i, fortaleza in enumerate(resultado.fortalezas, 1):
+        if resultado.streghts:
+            for i, fortaleza in enumerate(resultado.streghts, 1):
                 st.markdown(f"**{i}.** {fortaleza}")
         else:
             st.info("No se identificaron fortalezas específicas")
     
     with col_mejoras:
         st.subheader("📈 Áreas de Desarrollo")
-        if resultado.areas_mejora:
-            for i, area in enumerate(resultado.areas_mejora, 1):
+        if resultado.development_areas:
+            for i, area in enumerate(resultado.development_areas, 1):
                 st.markdown(f"**{i}.** {area}")
         else:
             st.info("No se identificaron áreas de mejora específicas")
@@ -244,14 +244,14 @@ def mostrar_resultados(resultado: AnalysisCV):
     
     st.subheader("📋 Recomendación Final")
     
-    if resultado.porcentaje_ajuste >= 70:
+    if resultado.fit_score >= 70:
         st.success("""
         ✅ **CANDIDATO RECOMENDADO**
         
         El perfil del candidato está bien alineado con los requisitos del puesto. 
         Se recomienda proceder con las siguientes etapas del proceso de selección.
         """)
-    elif resultado.porcentaje_ajuste >= 50:
+    elif resultado.fit_score >= 50:
         st.warning("""
         ⚠️ **CANDIDATO CON POTENCIAL**
         
