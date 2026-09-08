@@ -1,7 +1,6 @@
 import json
-
+import time
 import streamlit as st
-
 from models.cv_model import AnalysisCV
 from services.cv_analysis import cv_analysis
 
@@ -21,9 +20,9 @@ def render_results_area():
         elif not descripcion:
             st.error("⚠️ Por favor proporciona una descripción detallada del puesto")
         else:
-            with st.spinner("🔄 Procesando currículum..."):
+            # with st.spinner("🔄 Procesando currículum..."):
                 try:
-                    st.session_state["resultado"] = cv_analysis(archivo_cv, descripcion)
+                    st.session_state["resultado"] = _analizar_con_progreso(archivo_cv, descripcion)
                 except ValueError as e:
                     st.error(f"❌ {e}")
                     st.session_state["resultado"] = None
@@ -129,3 +128,31 @@ def _mostrar_instrucciones():
 
     **Consejos:** usa CVs con texto seleccionable (no escaneados) y sé específico en el puesto.
     """)
+
+def _analizar_con_progreso(archivo_cv, descripcion):
+    """Ejecuta el análisis mostrando una barra con mensajes por etapas."""
+    barra = st.progress(0)
+    estado = st.empty()
+
+    etapas = [
+        (15, "📄 Extrayendo texto del CV..."),
+        (35, "🔍 Identificando datos del candidato..."),
+        (55, "🧠 Analizando experiencia y habilidades..."),
+        (80, "📊 Evaluando ajuste al puesto..."),
+    ]
+    for porcentaje, mensaje in etapas:
+        estado.markdown(f"**{mensaje}**")
+        barra.progress(porcentaje)
+        time.sleep(0.5)   # pausa para que el mensaje se vea
+
+    # 👇 aquí ocurre el trabajo real (la barra se queda en 80% mientras)
+    resultado = cv_analysis(archivo_cv, descripcion)
+
+    estado.markdown("**✅ Análisis completado**")
+    barra.progress(100)
+    time.sleep(0.4)
+
+    # limpiamos la barra y el mensaje
+    barra.empty()
+    estado.empty()
+    return resultado

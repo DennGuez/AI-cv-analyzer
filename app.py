@@ -2,7 +2,7 @@ import streamlit as st
 from state import init_state
 from ui.input_section import render_input
 from ui.results import render_results_area
-
+from dotenv import load_dotenv
 
 def main():
     """Punto de entrada: configura la página y orquesta las dos columnas."""
@@ -12,8 +12,8 @@ def main():
         layout="wide",
         initial_sidebar_state="expanded",
     )
+    load_dotenv()   #
     init_state()
-
     st.title("📄 Sistema de Evaluación de CVs con IA")
     st.markdown("""
     **Analiza currículums y evalúa candidatos de manera objetiva usando IA**
