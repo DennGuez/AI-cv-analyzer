@@ -43,6 +43,10 @@ ANALYSIS_PROMPT = HumanMessagePromptTemplate.from_template(
         - Education and certifications (15% weight)
         - Career consistency (10% weight)
     Be precise, objective, and constructive in your analysis.
+    **DATA INTEGRITY RULES:**
+    - Use ONLY information explicitly present in the resume text.
+    - NEVER invent names, dates, or skills. No placeholder/example data.
+    - If a field is not present, return "No especificado" (or an empty list).
     """
 )
 
