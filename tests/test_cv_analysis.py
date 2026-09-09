@@ -1,7 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
 
-# Importación correcta desde la raíz del proyecto
 from services.cv_analysis import cv_analysis
 from models.cv_model import AnalysisCV 
 
@@ -23,7 +22,7 @@ def test_cv_analysis_ilegible(mock_extract):
 @patch('services.cv_analysis.cv_evaluator')
 @patch('services.cv_analysis.extract_cv_text')
 def test_cv_analysis_exito(mock_extract, mock_evaluator):
-    """Prueba el camino feliz: la IA procesa el texto correctamente."""
+    """Prueba buena: la IA procesa el texto correctamente."""
     mock_extract.return_value = "Experiencia: 5 años en Python..."
     
     mock_chain = MagicMock()
