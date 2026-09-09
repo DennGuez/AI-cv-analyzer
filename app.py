@@ -4,15 +4,18 @@ from ui.input_section import render_input
 from ui.results import render_results_area
 from dotenv import load_dotenv
 
+
+load_dotenv()   
+
+st.set_page_config(
+    page_title="Sistema de Evaluación de CVs",
+    page_icon="📄",
+    layout="wide",
+    initial_sidebar_state="expanded",
+)
+
 def main():
     """Punto de entrada: configura la página y orquesta las dos columnas."""
-    st.set_page_config(
-        page_title="Sistema de Evaluación de CVs",
-        page_icon="📄",
-        layout="wide",
-        initial_sidebar_state="expanded",
-    )
-    load_dotenv()   #
     init_state()
     st.title("📄 Sistema de Evaluación de CVs con IA")
     st.markdown("""
@@ -33,5 +36,4 @@ def main():
         render_results_area()
 
 
-if __name__ == "__main__":
-    main()
+main()
