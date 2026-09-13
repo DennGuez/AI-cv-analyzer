@@ -1,110 +1,96 @@
-# 📄 Sistema de Evaluación de CVs con IA
+# 🤖 AI-Powered CV Evaluation System
 
-Aplicación web construida con **Streamlit** que analiza currículums en PDF y evalúa, mediante IA, qué tan bien se ajusta un candidato a un puesto de trabajo. Extrae el perfil del candidato, identifica fortalezas y áreas de mejora, y asigna un porcentaje de ajuste al puesto.
+An **AI-driven** web app built with Streamlit that analyzes PDF resumes and evaluates how well a candidate fits a given job. Powered by **OpenAI (gpt-4o-mini)** and **LangChain**, it extracts the candidate profile, highlights strengths and gaps, and scores the fit for the role.
 
-## ✨ Características
+## ✨ Features
 
-- 📤 Subida de CV en formato PDF
-- 📝 Descripción libre del puesto a cubrir
-- 🤖 Análisis automático con IA (extracción de datos + evaluación)
-- 🎯 Porcentaje de ajuste al puesto (0–100) con nivel visual (Excelente / Bueno / Regular / Bajo)
-- 👤 Extracción de perfil: nombre, experiencia, educación, habilidades
-- 💪 Identificación de fortalezas y áreas de desarrollo
-- 📋 Recomendación final de contratación
-- 💾 Descarga del análisis en formato JSON
+- 📤 Upload a CV in PDF format
+- 📝 Free-text job description
+- 🤖 **Automated AI analysis** — data extraction + evaluation
+- 🎯 Job-fit score (0–100) with visual level (Excellent / Good / Fair / Low)
+- 👤 Profile extraction: name, experience, education, skills
+- 💪 Strengths and areas for improvement
+- 📋 Final hiring recommendation
+- 💾 Export the analysis as JSON
 
-## 🛠️ Tecnologías
+## 🛠️ Tech Stack
 
-- **[Streamlit](https://streamlit.io/)** — interfaz web
-- **[LangChain](https://python.langchain.com/)** — orquestación del prompt y salida estructurada
-- **[OpenAI](https://platform.openai.com/)** (`gpt-4o-mini`) — modelo de lenguaje
-- **[pdfplumber](https://github.com/jsvine/pdfplumber)** — extracción de texto del PDF
-- **[Pydantic](https://docs.pydantic.dev/)** — validación de la salida estructurada
+- **OpenAI (gpt-4o-mini)** — the AI language model at the core
+- **LangChain** — prompt orchestration and structured output
+- **Streamlit** — web interface
+- **pdfplumber** — PDF text extraction
+- **Pydantic** — structured output validation
 
-## 📁 Estructura del proyecto
+## ⚙️ How It Works
+
+1. **Extraction** — pdfplumber pulls the text from the PDF.
+2. **AI Analysis** — the resume text and job description are sent to gpt-4o-mini through a specialized prompt.
+3. **Structured Output** — LangChain forces the model's response into the `AnalysisCV` (Pydantic) schema for consistent data.
+4. **Display** — Streamlit renders the result in a clean, organized view.
+
+## 📁 Project Structure
 
 ```
-proyecto/
-├── streamlit_ui.py           # Interfaz de usuario (main)
+project/
+├── streamlit_ui.py           # UI (main)
 ├── models/
-│   └── cv_model.py           # Modelo Pydantic AnalysisCV
+│   └── cv_model.py           # AnalysisCV Pydantic model
 ├── services/
-│   ├── pdf_processor.py      # Extracción de texto del PDF
-│   └── cv_evaluator.py       # Cadena de análisis con IA
+│   ├── pdf_processor.py      # PDF text extraction
+│   └── cv_evaluator.py       # AI analysis chain
 ├── prompts/
-│   └── cv_prompts.py         # Prompts del sistema y de análisis
+│   └── cv_prompts.py         # System & analysis prompts
 ├── requirements.txt
 └── README.md
 ```
 
-## 📋 Requisitos previos
+## 🚀 Getting Started
 
-- Python 3.10 o superior
-- Una clave de API de OpenAI ([obtener aquí](https://platform.openai.com/api-keys))
+```bash
+# 1. Clone the repo
+git clone <repo-url>
+cd project
 
-## 🚀 Instalación
+# 2. Create and activate a virtual environment
+python -m venv venv
+source venv/bin/activate      # Windows: venv\Scripts\activate
 
-1. Clona el repositorio:
-   ```bash
-   git clone <url-del-repositorio>
-   cd proyecto
-   ```
-
-2. Crea y activa un entorno virtual:
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # En Windows: venv\Scripts\activate
-   ```
-
-3. Instala las dependencias:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-## 🔑 Configuración
-
-Crea un archivo `.env` en la raíz del proyecto con tu clave de OpenAI:
-
-```
-OPENAI_API_KEY=tu_clave_aqui
+# 3. Install dependencies
+pip install -r requirements.txt
 ```
 
-> ⚠️ No subas tu archivo `.env` al repositorio. Añádelo al `.gitignore`.
+**Requirements:** Python 3.10+ and an OpenAI API key.
 
-## ▶️ Uso
+## 🔑 Configuration
 
-Lanza la aplicación con:
+Create a `.env` file in the project root with your OpenAI key:
+
+```
+OPENAI_API_KEY=your_key_here
+```
+
+> ⚠️ Never commit your `.env` file. Add it to `.gitignore`.
+
+## ▶️ Usage
 
 ```bash
 streamlit run streamlit_ui.py
 ```
 
-Se abrirá en tu navegador (por defecto en `http://localhost:8501`). Después:
+It opens in your browser (default: `http://localhost:8501`). Then upload a PDF CV, enter the job description, click **"Analyze Candidate"**, review the results, and download if needed.
 
-1. Sube el CV del candidato en formato PDF
-2. Escribe la descripción del puesto
-3. Pulsa **"Analizar Candidato"**
-4. Revisa el análisis y descárgalo si lo necesitas
+## ⚠️ Limitations
 
-## ⚙️ Cómo funciona
+- Only processes PDFs with selectable text; scanned/image resumes need OCR.
+- AI evaluation is a decision-support tool, not a final verdict.
 
-1. **Extracción** — `pdfplumber` extrae el texto del PDF página por página.
-2. **Análisis** — el texto y la descripción del puesto se envían a `gpt-4o-mini` a través de un prompt especializado.
-3. **Salida estructurada** — LangChain fuerza la respuesta del modelo al esquema `AnalysisCV` (Pydantic), garantizando datos consistentes.
-4. **Visualización** — Streamlit muestra el resultado de forma organizada.
+## 🔮 Roadmap
 
-## ⚠️ Limitaciones
+- OCR support for scanned CVs
+- Export analysis as PDF/TXT
+- Evaluation history
+- Multi-candidate comparison
 
-- Solo procesa PDFs con **texto seleccionable**. Los CVs en formato imagen (escaneados o exportados como imagen) no se pueden leer sin OCR.
-- La evaluación depende del modelo de IA y debe tomarse como apoyo, no como decisión final.
-
-## 🔮 Posibles mejoras
-
-- [ ] Soporte para OCR (CVs escaneados)
-- [ ] Descarga del análisis en PDF o TXT
-- [ ] Historial de candidatos evaluados
-- [ ] Comparación entre varios candidatos
-
-## 📄 Licencia
+## 📄 License
 
 MIT
